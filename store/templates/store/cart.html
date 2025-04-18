@@ -1,0 +1,50 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-xl mt-6">
+  <h1 class="text-3xl font-bold text-blue-700 mb-6">🛒 Your Cart</h1>
+
+  {% if cart_items %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-left text-sm">
+        <thead class="bg-blue-50 border-b border-blue-200">
+          <tr>
+            <th class="py-3 px-4 font-semibold text-gray-700">Product</th>
+            <th class="py-3 px-4 font-semibold text-gray-700">Price</th>
+            <th class="py-3 px-4 font-semibold text-gray-700">Quantity</th>
+            <th class="py-3 px-4 font-semibold text-gray-700">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_items %}
+            <tr class="border-b hover:bg-gray-50">
+              <td class="py-3 px-4 font-medium text-gray-900">{{ item.product.name }}</td>
+              <td class="py-3 px-4 text-gray-600">Rs. {{ item.product.price }}</td>
+              <td class="py-3 px-4 text-gray-600">{{ item.quantity }}</td>
+              <td class="py-3 px-4 text-gray-800 font-semibold">Rs. {{ item.product.price|floatformat:2|add:item.quantity|floatformat:2 }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Total and Place Order -->
+    <div class="mt-6 flex justify-between items-center">
+      <div class="text-xl font-semibold text-gray-700">
+        Total Items: {{ cart_items|length }}
+      </div>
+
+      <form method="post" action="{% url 'place_order' %}">
+        {% csrf_token %}
+        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-xl shadow transition">
+          ✅ Place Order
+        </button>
+      </form>
+    </div>
+
+  {% else %}
+    <p class="text-gray-500 text-lg">Your cart is empty. <a href="{% url 'home' %}" class="text-blue-600 hover:underline">Browse products</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

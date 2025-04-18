@@ -1,0 +1,242 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GizmoTray Nepal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: '#1D4ED8',
+            hover: '#2563EB',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .mega-menu:hover .mega-dropdown {
+      display: flex;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <!-- ✅ Header with Logo + First Nav -->
+  <header class="bg-white border-b shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-4 flex-wrap sm:flex-nowrap">
+      <!-- Logo -->
+      <a href="{% url 'home' %}" class="flex-shrink-0">
+        <img src="{% static 'images/logo.png' %}" alt="GizmoTray Nepal" class="h-24 sm:h-28 object-contain">
+      </a>
+      <!-- Main Navigation -->
+      <nav class="flex space-x-6 mt-4 sm:mt-0 text-base font-medium">
+        <a href="{% url 'home' %}" class="hover:text-blue-600 transition">Home</a>
+        <a href="{% url 'about' %}" class="hover:text-blue-600 transition">About</a>
+        <a href="{% url 'contact' %}" class="hover:text-blue-600 transition">Contact</a>
+        <a href="{% url 'view_cart' %}" class="text-blue-600 hover:text-blue-800 transition">🛒 Cart</a>
+        {% if user.is_authenticated %}
+          <span class="text-gray-700">Hi, {{ user.username }}!</span>
+          <form action="{% url 'account_logout' %}" method="post" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="text-red-600 hover:text-red-800 font-semibold transition">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'account_login' %}" class="text-blue-600 hover:text-blue-800 transition">Login</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <!-- ✅ Second Nav with Dropdowns -->
+  <nav class="bg-blue-700 text-white text-sm sm:text-base shadow">
+    <div class="max-w-7xl mx-auto px-4 flex justify-center flex-wrap items-center space-x-4 sm:space-x-6">
+      <!-- Example Category -->
+      <div class="relative mega-menu group py-3">
+        <button class="font-semibold px-3 hover:bg-blue-800 transition rounded">Laptops & Desktops</button>
+        <div class="absolute left-0 hidden mega-dropdown bg-white text-black shadow-xl mt-0 z-50 p-6 space-x-12 text-sm text-left w-auto">
+          <div>
+            <h4 class="font-semibold mb-2">Laptops By Brand</h4>
+            <ul class="space-y-1">
+              <li>Acer</li><li>Apple</li><li>ASUS</li><li>Dell</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-2">Laptops by Processors</h4>
+            <ul class="space-y-1">
+              <li>12th Gen</li><li>13th Gen</li><li>14th Gen</li><li>Ryzen</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add More Categories Below in Same Format -->
+      <div class="relative mega-menu group py-3">
+        <button class="font-semibold px-3 hover:bg-blue-800 transition rounded">PC Components</button>
+        <div class="absolute left-0 hidden mega-dropdown bg-white text-black shadow-xl mt-0 z-50 p-6 space-x-12 text-sm text-left w-auto">
+          <div>
+            <h4 class="font-semibold mb-2">Components</h4>
+            <ul class="space-y-1">
+              <li>Processors</li><li>RAM</li><li>Graphics</li><li>Cases</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative mega-menu group py-3">
+        <button class="font-semibold px-3 hover:bg-blue-800 transition rounded">Accessories</button>
+        <div class="absolute left-0 hidden mega-dropdown bg-white text-black shadow-xl mt-0 z-50 p-6 space-x-12 text-sm text-left w-auto">
+          <div>
+            <h4 class="font-semibold mb-2">Computer Accessories</h4>
+            <ul class="space-y-1">
+              <li>Keyboard</li><li>Mouse</li><li>Headphones</li><li>Speakers</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative mega-menu group py-3">
+        <button class="font-semibold px-3 hover:bg-blue-800 transition rounded">Office Solutions</button>
+        <div class="absolute left-0 hidden mega-dropdown bg-white text-black shadow-xl mt-0 z-50 p-6 space-x-12 text-sm text-left w-auto">
+          <div>
+            <h4 class="font-semibold mb-2">Printers</h4>
+            <ul class="space-y-1">
+              <li>Laser</li><li>Inkjet</li><li>Dot Matrix</li><li>Scanner</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative mega-menu group py-3">
+        <button class="font-semibold px-3 hover:bg-blue-800 transition rounded">PC Builder</button>
+        <div class="absolute left-0 hidden mega-dropdown bg-white text-black shadow-xl mt-0 z-50 p-6 space-x-12 text-sm text-left w-auto">
+          <div>
+            <h4 class="font-semibold mb-2">Custom Build</h4>
+            <ul class="space-y-1">
+              <li>Intel Builds</li><li>AMD Builds</li><li>Budget PCs</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ✅ Page Content -->
+  <main class="px-4 max-w-7xl mx-auto mt-8">
+    {% if messages %}
+      <div class="max-w-xl mx-auto mb-4">
+        {% for message in messages %}
+          <div class="rounded px-4 py-3 mb-2 text-white 
+            {% if message.tags == 'success' %}bg-green-500
+            {% elif message.tags == 'error' %}bg-red-500
+            {% elif message.tags == 'warning' %}bg-yellow-500
+            {% else %}bg-blue-500{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+<!-- 🌐 Footer Section -->
+<footer class="bg-gray-800 text-white py-12 mt-20">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+      
+      <!-- COMPANY -->
+      <div>
+        <h3 class="text-lg font-bold mb-4">COMPANY</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#">About GizmoTray</a></li>
+          <li><a href="#">Blogs</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Sitemap</a></li>
+        </ul>
+      </div>
+  
+      <!-- CUSTOMER SERVICE -->
+      <div>
+        <h3 class="text-lg font-bold mb-4">CUSTOMER SERVICE</h3>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">Warranty Policy</a></li>
+          <li><a href="#">Return Policy</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Repair & Support</a></li>
+        </ul>
+      </div>
+  
+      <!-- FOLLOW US -->
+      <div>
+        <h3 class="text-lg font-bold mb-4">FOLLOW US</h3>
+        <div class="flex space-x-4 text-xl text-gray-300">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+  
+      <!-- SUBSCRIBE -->
+      <div>
+        <h3 class="text-lg font-bold mb-4">NEWSLETTER</h3>
+        <p class="text-gray-300 mb-2">Sign up and get Rs. 200 off your first order!</p>
+        <form class="flex">
+          <input type="email" placeholder="Your email" class="px-3 py-2 rounded-l bg-white text-black w-full">
+          <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-r hover:bg-red-700">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- COPYRIGHT -->
+    <div class="text-center text-gray-400 text-xs mt-10 border-t border-gray-700 pt-6">
+      &copy; 2025 GizmoTray Nepal. All rights reserved.
+    </div>
+  </footer>
+  
+  <!-- 🔘 Floating Feedback Button -->
+  <button onclick="toggleFeedback()" class="fixed right-4 bottom-4 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-full shadow-lg z-50">
+    Feedback
+  </button>
+  
+  <!-- 💬 Feedback Popup -->
+  <div id="feedbackPopup" class="hidden fixed right-4 bottom-20 w-80 bg-white rounded-xl shadow-2xl p-6 z-50">
+    <div class="flex justify-between items-center mb-3">
+      <h2 class="text-lg font-bold">GizmoTray Feedback</h2>
+      <button onclick="toggleFeedback()" class="text-gray-600 hover:text-red-500 text-xl">&times;</button>
+    </div>
+  
+    <p class="text-sm mb-2 text-gray-700">Rate Your Experience</p>
+    <div class="flex justify-between mb-4 text-2xl">
+      <span>😠</span><span>😕</span><span>😐</span><span>😊</span><span>😍</span>
+    </div>
+  
+    <input type="email" placeholder="Email Address" class="w-full border rounded px-3 py-2 mb-3 text-sm" />
+    <textarea rows="3" placeholder="Share your experience..." class="w-full border rounded px-3 py-2 mb-3 text-sm"></textarea>
+  
+    <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">Submit Feedback</button>
+  </div>
+  
+  <!-- 🔄 Toggle Script -->
+  <script>
+    function toggleFeedback() {
+      const popup = document.getElementById('feedbackPopup');
+      popup.classList.toggle('hidden');
+    }
+  </script>
+  
+  <!-- Optional: Font Awesome for Icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  
+</body>
+</html>
