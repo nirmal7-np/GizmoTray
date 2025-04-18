@@ -122,3 +122,5 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+ALLOWED_HOSTS = ['gizmotray.onrender.com', 'localhost', '127.0.0.1']
+
