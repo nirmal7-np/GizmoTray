@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-(+auz9*c)2)5&*#)zq817z=#8-w_&-x6(8)egi0w_wj&-*z8+o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "127.0.0.1").split(",")
+ALLOWED_HOSTS = ['gizmotray.onrender.com', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
