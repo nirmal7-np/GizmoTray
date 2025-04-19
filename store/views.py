@@ -5,6 +5,7 @@ from django.contrib import messages
 from .models import Product, Cart, Order, OrderItem, Category, Feedback
 from .forms import FeedbackForm
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 def home(request):
     products = Product.objects.all()
@@ -46,6 +47,7 @@ def place_order(request):
         return redirect('order_success')
     return redirect('view_cart')
 
+@login_required
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'store/product_detail.html', {'product': product})
