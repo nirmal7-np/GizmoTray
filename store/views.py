@@ -1,11 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Cart
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
+from .models import Product, Cart, Order, OrderItem, Category, Feedback
+from .forms import FeedbackForm
 
 def home(request):
     products = Product.objects.all()
-    return render(request, 'store/home.html', {'products': products})
+    categories = Category.objects.all()
+    feedback_form = FeedbackForm()
+    return render(request, 'store/home.html', {
+        'products': products,
+        'categories': categories,
+        'feedback_form': feedback_form
+    })
 
 @login_required
 def add_to_cart(request, product_id):
@@ -21,14 +29,22 @@ def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
     return render(request, 'store/cart.html', {'cart_items': cart_items})
 
+@login_required
 def place_order(request):
     if request.method == "POST":
-        Cart.objects.filter(user=request.user).delete()
+        cart_items = Cart.objects.filter(user=request.user)
+        if not cart_items:
+            messages.error(request, "🛒 Your cart is empty!")
+            return redirect('view_cart')
+
+        order = Order.objects.create(user=request.user)
+        for item in cart_items:
+            OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity)
+        cart_items.delete()
         messages.success(request, "✅ Your order has been placed successfully!")
         return redirect('order_success')
     return redirect('view_cart')
 
-# 🔧 Add this function to fix the NoReverseMatch issue
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'store/product_detail.html', {'product': product})
@@ -42,9 +58,20 @@ def contact_view(request):
 def order_success(request):
     return render(request, 'store/order_success.html')
 
-def place_order(request):
-    # ... your order logic
-    messages.success(request, "Your order was placed successfully!")
-    return redirect('order_success')
+def submit_feedback(request):
+    if request.method == 'POST':
+        emoji = request.POST.get('emoji')
+        email = request.POST.get('email')
+        comment = request.POST.get('comment')
+        Feedback.objects.create(emoji=emoji, email=email, comment=comment)
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
-
+@staff_member_required
+def custom_admin_dashboard(request):
+    context = {
+        'product_count': Product.objects.count(),
+        'order_count': Order.objects.count(),
+        'user_count': User.objects.count(),
+        'feedback_count': Feedback.objects.count(),
+    }
+    return render(request, 'admin/custom_dashboard.html', context)

@@ -1,0 +1,41 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div class="p-6 bg-gray-50 min-h-screen font-sans">
+  <h1 class="text-3xl font-bold mb-8 text-gray-800">📊 GizmoTray Admin Dashboard</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <div class="bg-blue-100 p-5 rounded-xl shadow-md hover:shadow-lg transition">
+      <h2 class="text-sm text-gray-600">Total Products</h2>
+      <p class="text-3xl font-bold text-blue-700 mt-1">{{ product_count }}</p>
+    </div>
+
+    <div class="bg-green-100 p-5 rounded-xl shadow-md hover:shadow-lg transition">
+      <h2 class="text-sm text-gray-600">Orders Placed</h2>
+      <p class="text-3xl font-bold text-green-700 mt-1">{{ order_count }}</p>
+    </div>
+
+    <div class="bg-yellow-100 p-5 rounded-xl shadow-md hover:shadow-lg transition">
+      <h2 class="text-sm text-gray-600">Registered Users</h2>
+      <p class="text-3xl font-bold text-yellow-700 mt-1">{{ user_count }}</p>
+    </div>
+
+    <div class="bg-pink-100 p-5 rounded-xl shadow-md hover:shadow-lg transition">
+      <h2 class="text-sm text-gray-600">Feedback Received</h2>
+      <p class="text-3xl font-bold text-pink-700 mt-1">{{ feedback_count }}</p>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-lg shadow border border-gray-100">
+    <h2 class="text-xl font-semibold mb-4 text-gray-800">🔗 Quick Actions</h2>
+    <ul class="space-y-2 text-blue-600 font-medium">
+      <li><a href="{% url 'custom_admin:store_product_add' %}" class="hover:underline">➕ Add New Product</a></li>
+      <li><a href="{% url 'custom_admin:store_order_changelist' %}" class="hover:underline">📦 View All Orders</a></li>
+      <li><a href="{% url 'custom_admin_dashboard' %}" class="text-blue-600 hover:underline">📊 Go to Custom Dashboard</a></li>      
+      <li><a href="{% url 'custom_admin:store_feedback_changelist' %}" class="hover:underline">💬 Manage Feedback</a></li>
+      <li><a href="{% url 'custom_admin:auth_user_changelist' %}" class="hover:underline">👥 View Users</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
