@@ -23,9 +23,12 @@ class FeedbackForm(forms.ModelForm):
         model = Feedback
         fields = ['emoji', 'email', 'comment']
         widgets = {
-            'emoji': forms.RadioSelect(choices=[
-                ('😠', '😠'), ('😕', '😕'), ('😐', '😐'), ('😊', '😊'), ('😍', '😍')
-            ]),
-            'email': forms.EmailInput(attrs={'placeholder': 'Your Email'}),
-            'comment': forms.Textarea(attrs={'placeholder': 'Your Feedback'}),
+            'emoji': forms.RadioSelect(attrs={'class': 'inline-block'}),
+            'email': forms.EmailInput(attrs={'class': 'w-full border rounded px-3 py-2 text-sm'}),
+            'comment': forms.Textarea(attrs={'class': 'w-full border rounded px-3 py-2 text-sm', 'rows': 3}),
+        }
+        labels = {
+            'emoji': 'Rate Your Experience',
+            'email': 'Your Email',
+            'comment': 'Share your experience',
         }

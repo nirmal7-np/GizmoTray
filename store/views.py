@@ -4,6 +4,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from .models import Product, Cart, Order, OrderItem, Category, Feedback
 from .forms import FeedbackForm
+from django.http import JsonResponse
 
 def home(request):
     products = Product.objects.all()
@@ -58,14 +59,6 @@ def contact_view(request):
 def order_success(request):
     return render(request, 'store/order_success.html')
 
-def submit_feedback(request):
-    if request.method == 'POST':
-        emoji = request.POST.get('emoji')
-        email = request.POST.get('email')
-        comment = request.POST.get('comment')
-        Feedback.objects.create(emoji=emoji, email=email, comment=comment)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
-
 @staff_member_required
 def custom_admin_dashboard(request):
     context = {
@@ -75,3 +68,20 @@ def custom_admin_dashboard(request):
         'feedback_count': Feedback.objects.count(),
     }
     return render(request, 'admin/custom_dashboard.html', context)
+
+def submit_feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # Save the feedback after validation
+            form.save()
+            messages.success(request, "✅ Thank you for your feedback!")
+        else:
+            # Handle invalid form submission
+            messages.error(request, "❌ Invalid feedback submission. Please try again.")
+    else:
+        messages.error(request, "❌ Feedback submission failed. Invalid request method.")
+    
+    # Redirect to a fallback URL if HTTP_REFERER is not available
+    fallback_url = 'home'  # Replace 'home' with the name of your desired fallback view
+    return redirect(request.META.get('HTTP_REFERER') or fallback_url)
